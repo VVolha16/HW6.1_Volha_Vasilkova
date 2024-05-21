@@ -68,3 +68,34 @@ Sad Path requests:
 Please use the environment file [postman_environment_hw_6.1.](https://github.com/VVolha16/HW6.1_Volha_Vasilkova/blob/main/postman_environment_hw_6.1.json) or [test_data_hw_6.1](https://github.com/VVolha16/HW6.1_Volha_Vasilkova/blob/main/test_data_hw_6.1.csv) for necessary variables values.
 
 Collection is ready for API testing
+
+## Variables
+
+- **Local Variables:**  scoped to a single request or script
+- **Data Variables:**  used in conjunction with data files (like CSV or JSON) to run collections with different sets of data
+- **Environment Variables:**  specific to a particular environment, used when dofferent collections can use the same environment
+- **Collection Variables:** scoped to a specific collection, used when variable is specific only to current collection, and e.g. you don't need to specify environment 
+- **Global Variables:** available across all collections and environments, used in case all collections and environments are related to the same base URL
+
+
+## Priority in Usage
+When multiple variables have the same name, Postman resolves the variable based on a specific priority order. The priority order from highest to lowest is:
+
+- **Local Variables:** These are the highest priority because they are specific to a single request and defined in the request script or pre-request script.
+- **Data Variables:** These come next and are used during collection runs with data files.
+- **Environment Variables:** These have a higher priority than global and collection variables because they are specific to the environment being used.
+- **Collection Variables:** These are scoped to the collection and override global variables.
+- **Global Variables:** These have the lowest priority and are accessible across the entire Postman instance but are overridden by other types of variables if they exist
+
+
+In current collection the following variables are specified:
+- **{{baseUrl}}** - environment
+- **{{adminUsername}}** - environment
+- **{{adminPassword}}** - environment
+- **{{rememberMe}}** - environment 
+- **{{text}}** - environment and data
+- **{{answer}}** - environment and data
+- **{{title}}** - environment and data
+- **{{happyPathTitle}}** - environment and data
+- **{{sadPathText}}** - environment and data
+- **{{sadPathAnswer}}** - environment and data
