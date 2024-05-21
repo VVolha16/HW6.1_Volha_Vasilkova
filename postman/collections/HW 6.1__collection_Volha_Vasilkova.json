@@ -1,0 +1,416 @@
+{
+	"info": {
+		"_postman_id": "29ec8206-761a-41fc-abaf-e57a43b3c69b",
+		"name": "HW 6.1__collection_Volha_Vasilkova",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "25901141-29ec8206-761a-41fc-abaf-e57a43b3c69b"
+	},
+	"item": [
+		{
+			"name": "ADMIN login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "faf7ad1f-ccd4-40b7-9fee-074ee74ea808",
+						"exec": [
+							"let jsonBody = pm.response.json();\r",
+							"pm.environment.set(\"id_token\", jsonBody.id_token);\r",
+							"\r",
+							"//TESTS\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"// чек, что токен возвращается при логине как админ\r",
+							"pm.test(\"Check that id_token is present in the response and not empty, underfined or null\", function () {\r",
+							"    // Проверяем, что свойство 'id_token' существует\r",
+							"    pm.expect(jsonBody).to.have.property('id_token');\r",
+							"    // Проверяем, что значение свойства 'token' не является undefined, null или пустой строкой\r",
+							"    pm.expect(jsonBody.id_token).to.not.be.undefined;\r",
+							"    pm.expect(jsonBody.id_token).to.not.be.null;\r",
+							"    pm.expect(jsonBody.id_token).to.not.eql('');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "49a3b177-2d02-47ef-805c-7608e1c5ab63",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en-US,en;q=0.5"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br"
+					},
+					{
+						"key": "Referer",
+						"value": "http://localhost:8080/login"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Origin",
+						"value": "http://localhost:8080"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "empty"
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "cors"
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-origin"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"{{adminUsername}}\",\r\n\"password\":\"{{adminPassword}}\",\r\n\"rememberMe\": {{rememberMe}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/authenticate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HP: create a task with valid values",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "08847d14-2a9f-433e-9775-b5ced7748ba9",
+						"exec": [
+							"//TESTS\r",
+							"pm.test(\"Status code is 201, New Task is created\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code name is \\\"CREATED\\\" as expected\", function () {\r",
+							"    pm.response.to.have.status(\"Created\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "890f27b9-d0ee-4135-a585-fa31c14f537e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"{{text}}\",\r\n  \"answer\": \"{{answer}}\",\r\n  \"title\": \"{{title}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/tasks",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HP: create a task with long title",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fffae5e0-8681-482c-912c-ac2f937acf8e",
+						"exec": [
+							"let responseData = pm.response.json();\r",
+							"\r",
+							"//TESTS\r",
+							"pm.test(\"Status code is 201, New Task is created\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code name is \\\"CREATED\\\" as expected\", function () {\r",
+							"    pm.response.to.have.status(\"Created\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "609c3169-040f-4570-9d28-59be38a4faf2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNDU5NDUzOSwiYXV0aCI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MTQ1MDgxMzl9.EeDG-a5Z3bVxjA1-le5QckW2YoOvYcSg52ffDgDEvfXC0PH619uRw8QXx1e4Ooye79LY7Yn_yKfBGz7CcYLU2A"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"{{text}}\",\r\n  \"answer\": \"{{answer}}\",\r\n  \"title\": \"{{happyPathTitle}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/tasks",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SP: error when create a task with long text",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b5cf35f8-1b1f-49cc-8112-8bb4fc7b8f4b",
+						"exec": [
+							"let responseData = pm.response.json();\r",
+							"\r",
+							"//TESTS\r",
+							"pm.test(\"Status code is 500 Bad Request\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"When create task with field \\\"text\\\" length more than max => response body includes property \\\"status\\\": 500\", function () {\r",
+							"        pm.expect(responseData.status).to.equal(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4e3eef79-cdab-4a57-a942-9a1c0d5199aa",
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "eb67559e-011d-4117-b9b7-a63214470c97",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNDU5NDUzOSwiYXV0aCI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MTQ1MDgxMzl9.EeDG-a5Z3bVxjA1-le5QckW2YoOvYcSg52ffDgDEvfXC0PH619uRw8QXx1e4Ooye79LY7Yn_yKfBGz7CcYLU2A"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"{{sadPathText}}\",\r\n  \"answer\": \"{{answer}}\",\r\n  \"title\": \"{{title}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/tasks",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SP: error when create a task with long answer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "283ba09c-20d2-4b8c-a369-21934f34cc5b",
+						"exec": [
+							"let responseData = pm.response.json();\r",
+							"\r",
+							"//TESTS\r",
+							"pm.test(\"Status code is 500 Bad Request\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"When create task with field \\\"answer\\\" length more than max => response body includes property \\\"status\\\": 500\", function () {\r",
+							"        pm.expect(responseData.status).to.equal(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "d3ff44ab-2826-4364-ab77-752483b8be21",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNDU5NDUzOSwiYXV0aCI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MTQ1MDgxMzl9.EeDG-a5Z3bVxjA1-le5QckW2YoOvYcSg52ffDgDEvfXC0PH619uRw8QXx1e4Ooye79LY7Yn_yKfBGz7CcYLU2A"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"{{text}}\",\r\n  \"answer\": \"{{sadPathAnswer}}\",\r\n  \"title\": \"{{title}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/tasks",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{id_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				],
+				"id": "b7545897-15df-4d6e-8ea6-04831e6e2860"
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				],
+				"id": "88a9c5f6-cff6-4b45-816b-afba45f122f5"
+			}
+		}
+	]
+}
